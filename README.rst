@@ -10,7 +10,7 @@ If you have 3to2 from the PyPI installed you can just run ``make 3to2`` and you 
 Usage
 =====
 
-There are two entrypoint scripts, ``encrypt.py`` and ``decrypt.py``.  To encrypt something you have to pass the following as arguments to ``encrypt.py``:
+The ``main.py`` script has two subcommands, ``encrypt`` and ``decrypt``.  To encrypt something you have to pass the following as arguments to the ``encrypt`` subcommand:
 
 1. A 10 character key for the straddling checkerboard, with two of those characters being spaces that are used for the second and third layer of the checkerboard.
 2. A 5 digit unique and random message ID.
@@ -19,7 +19,8 @@ There are two entrypoint scripts, ``encrypt.py`` and ``decrypt.py``.  To encrypt
 5. A 1 or 2 digit personal identifier, unique per person.
 6. A cleartext message to encrypt.
 
-To decrypt a message you have to pass the following as arguments to ``decrypt.py``:
+
+To decrypt a message you have to pass the following as arguments to the ``decrypt`` subcommand:
 
 1. A 10 character key for the straddling checkerboard, with two of those characters being spaces that are used for the second and third layer of the checkerboard.
 2. A 20 character passphrase used to derive keys.

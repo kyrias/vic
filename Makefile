@@ -1,4 +1,6 @@
-FILES = encrypt.py decrypt.py ik.py checkerboard.py transposition.py message_indicator.py util.py rotation.py
+FILES = main.py encrypt.py decrypt.py \
+        ik.py checkerboard.py transposition.py message_indicator.py \
+        util.py rotation.py arithmetic.py
 
 3to2: $(addprefix 3to2/, $(FILES))
 

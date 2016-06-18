@@ -97,3 +97,27 @@ def derive_c(u):
     stringified = map(str, modded)
 
     return list(stringified)
+
+
+def generate_ik(passphrase, message_id, date, personal_id):
+    s_one, s_two = derive_s(passphrase)
+    g = derive_g(message_id, date, s_one)
+    t = derive_t(g, s_two)
+    u = derive_u(t)
+
+    width_one, width_two = derive_w(personal_id, u)
+    key_one, key_two     = derive_k(t, u, width_one, width_two)
+    checkerboard_header  = derive_c(u)
+
+    return {
+        'S1': s_one,
+        'S2': s_two,
+        'G': g,
+        'T': t,
+        'U': u,
+        'width_one': width_one,
+        'width_two': width_two,
+        'key_one': key_one,
+        'key_two': key_two,
+        'checkerboard_header': checkerboard_header,
+    }
