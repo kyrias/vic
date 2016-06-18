@@ -65,7 +65,7 @@ parser.add_argument('-d', '--date',
                     dest='date',
                     action='store',
                     required=True,
-                    help='Date used for deriving keys and to insert the message ID group')
+                    help='Date used to derive keys and to insert the message ID group')
 
 parser.add_argument('-i', '--personal-id',
                     dest='personal_id',
