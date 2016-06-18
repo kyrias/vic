@@ -9,18 +9,6 @@ def invert_index(xs):
     return [x[0] for x in xs]
 
 
-def split_digits(x):
-    res = []
-
-    while x > 9:
-        res.append(x % 10)
-        x = x // 10
-
-    res.append(x)
-
-    return list(reversed(res))
-
-
 def lpop(a):
     x = a[:1][0]
     xs = a[1:]

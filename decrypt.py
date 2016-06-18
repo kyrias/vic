@@ -8,11 +8,6 @@ from transposition import undo_first_transposition, undo_second_transposition
 from checkerboard import build_inverted_checkerboard, inverted_lookup
 
 
-def pa(a):
-    for row in a:
-        print('\t'.join([str(x) for x in row]))
-
-
 def main(checkerboard_key, passphrase,
          date, personal_id,
          ciphertext):

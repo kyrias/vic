@@ -1,6 +1,6 @@
 from copy import deepcopy
 
-from util import invert_index, lpop, pa, group_by_n
+from util import invert_index, lpop, group_by_n
 from rotation import rotate_left
 
 
