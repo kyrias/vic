@@ -1,4 +1,4 @@
-from util import lpop
+from .util import lpop
 
 
 def mod_add(x, y):

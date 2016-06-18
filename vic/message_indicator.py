@@ -1,4 +1,4 @@
-from util import group_by_n
+from .util import group_by_n
 
 
 def insert_message_indicator(ciphertext, mi, date):

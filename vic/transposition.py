@@ -1,7 +1,7 @@
 from copy import deepcopy
 
-from util import invert_index, lpop, group_by_n
-from rotation import rotate_left
+from .util import invert_index, lpop, group_by_n
+from .rotation import rotate_left
 
 
 def first_transposition(message_list, key):

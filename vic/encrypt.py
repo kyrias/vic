@@ -1,7 +1,7 @@
-from ik import (generate_ik)
-from checkerboard import (build_checkerboard, lookup)
-from transposition import (first_transposition, second_transposition)
-from message_indicator import (insert_message_indicator)
+from .ik import (generate_ik)
+from .checkerboard import (build_checkerboard, lookup)
+from .transposition import (first_transposition, second_transposition)
+from .message_indicator import (insert_message_indicator)
 
 
 def encrypt(args):

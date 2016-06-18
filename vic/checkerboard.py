@@ -1,4 +1,4 @@
-from util import pad_to_width, lpop
+from .util import pad_to_width, lpop
 
 
 def build_checkerboard(passphrase, c):

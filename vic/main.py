@@ -1,13 +1,14 @@
 import argparse
-from os import exit
+from sys import exit
 
-from encrypt import encrypt
-from decrypt import decrypt
+from .encrypt import encrypt
+from .decrypt import decrypt
 
 
 def main():
     parser = argparse.ArgumentParser(prog='vic')
-    subparsers = parser.add_subparsers(help='sub-command help')
+    subparsers = parser.add_subparsers(dest='subparser',
+                                       help='sub-command help')
 
     # Encryption subparser
 
@@ -86,6 +87,9 @@ def main():
                                 help='Personal ID for generating transposition tables')
 
     args = parser.parse_args()
+    if not args.subparser:
+        exit(parser.parse_args(['--help']))
+
     exit(args.func(args))
 
 

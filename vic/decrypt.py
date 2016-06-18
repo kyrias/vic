@@ -1,7 +1,7 @@
-from ik import (generate_ik)
-from message_indicator import (pop_message_indicator)
-from transposition import (undo_first_transposition, undo_second_transposition)
-from checkerboard import (build_inverted_checkerboard, inverted_lookup)
+from .ik import (generate_ik)
+from .message_indicator import (pop_message_indicator)
+from .transposition import (undo_first_transposition, undo_second_transposition)
+from .checkerboard import (build_inverted_checkerboard, inverted_lookup)
 
 
 def decrypt(args):

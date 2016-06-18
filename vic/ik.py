@@ -1,6 +1,6 @@
-from util import sequentialize
-from rotation import rotate_left
-from arithmetic import wrap_subs, mod_adds, chain_add
+from .util import sequentialize
+from .rotation import rotate_left
+from .arithmetic import wrap_subs, mod_adds, chain_add
 
 
 def derive_s(passphrase):
