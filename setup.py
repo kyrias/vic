@@ -12,7 +12,7 @@ with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
 
 setup(
     name='vic',
-    version='0.0.0',
+    version='0.0.1',
 
     description='Implementation of the pen-and-paper VIC cipher',
     long_description=long_description,
