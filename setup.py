@@ -31,7 +31,7 @@ setup(
         'Intended Audience :: End Users/Desktop',
         'Topic :: Security :: Cryptography',
 
-        'License :: OSI Approved :: ISC License (ISCL)'
+        'License :: OSI Approved :: ISC License (ISCL)',
 
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.5',
