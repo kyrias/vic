@@ -1,4 +1,4 @@
-from util import pad_message, lpop
+from util import pad_to_width, lpop
 
 
 def build_checkerboard(passphrase, c):
@@ -57,7 +57,7 @@ def lookup(xs, table):
                 else:
                     res += list(value)
 
-    return pad_message(res)
+    return pad_to_width(res, '0', 5)
 
 
 def inverted_lookup(xs, table):

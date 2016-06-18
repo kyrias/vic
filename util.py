@@ -36,18 +36,10 @@ def group_by_n(x, n):
     return res
 
 
-def pad_to_length(xs, character, width):
+def pad_to_width(xs, character, width):
     xs_len = len(xs)
     if xs_len % width != 0:
         xs += [character] * (width - xs_len % width)
-
-    return xs
-
-
-def pad_message(xs):
-    xs_len = len(xs)
-    if xs_len % 5 != 0:
-        xs += ['0'] * (5 - xs_len % 5)
 
     return xs
 
