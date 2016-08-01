@@ -25,6 +25,7 @@ py2_bdist: 3to2
 
 clean:
 	-rm -rf 3to2
+	-rm -rf build
 
 
 .PHONY: build_release sdist py3_bdist py2_bdist 3to2 clean
