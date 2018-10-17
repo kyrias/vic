@@ -48,3 +48,15 @@ def sequentialize(xs):
                 i += 1
 
     return res
+
+
+def lagged_fibonacci(initial):
+    for i in initial:
+        yield i
+
+    chain = list(initial)
+    while len(chain) > 1:
+        first = chain.pop(0)
+        new = (first + chain[0]) % 10
+        chain.append(new)
+        yield new

@@ -1,6 +1,8 @@
-from .util import sequentialize
+from itertools import islice
+
+from .util import sequentialize, lagged_fibonacci
 from .rotation import rotate_left
-from .arithmetic import wrap_subs, mod_adds, chain_add
+from .arithmetic import wrap_subs, mod_adds
 
 
 def derive_s(passphrase):
@@ -17,7 +19,7 @@ def derive_g(message_id, date, s_one):
     s_one = map(int, s_one)
     temp = wrap_subs(mid, date)
 
-    expanded = chain_add(temp, 5)
+    expanded = list(islice(lagged_fibonacci(temp), 5))
     g = mod_adds(expanded, s_one)
 
     return g
@@ -33,7 +35,7 @@ def derive_t(g, s_two):
 
 def derive_u(t):
     t = list(map(int, t))
-    u = chain_add(t, 50, done=[])[10:]
+    u = list(islice(lagged_fibonacci(t), 50))[10:]
 
     return list(map(str, u))
 
