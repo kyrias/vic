@@ -1,6 +1,6 @@
 VIC_FILES = __init__.py main.py encrypt.py decrypt.py \
             ik.py checkerboard.py transposition.py message_indicator.py \
-            util.py rotation.py arithmetic.py
+            util.py rotation.py
 
 FILES = $(addprefix vic/, $(VIC_FILES)) setup.py README.rst
 
