@@ -1,7 +1,9 @@
+from math import ceil
 from string import ascii_uppercase
-from itertools import count, islice
+from itertools import count, cycle
 
-from .utils import modular_addition, modular_subtraction, take, chunk, pad_to_multiple
+from .utils import modular_addition, modular_subtraction, take, chunk, pad_to_multiple, \
+        inverted_list_index
 
 
 def sequentialize(inputs):
@@ -183,6 +185,64 @@ def first_transposition(key, message):
     flattened = [ digit for row in filtered for digit in row ]
 
     return flattened
+
+
+def build_disruption_table(key, message_length):
+    width = len(key)
+    height = message_length // width
+
+    # Get the indexes into the key that gives the values in order
+    key_index = inverted_list_index(key)
+    index_generator = cycle(key_index)
+    index = next(index_generator)
+
+    table = []
+    while height:
+        table.append(([None] * index) + (['*'] * (width - index)))
+        index += 1
+
+        # If we filled the whole line with Nones, get the next lowest key value index
+        if index > width:
+            index = next(index_generator)
+
+        height -= 1
+
+    return table
+
+
+def second_transposition(key, message):
+    """The second transposition is a disrupted transposition, where the disruption pattern is
+    determined by the width of the transposition table and the key.
+    """
+    message_length = len(message)
+    disruption_table = build_disruption_table(key, message_length)
+
+    # Fill in the left portion of the disruption table
+    for row in disruption_table:
+        for idx, _ in filter(lambda r: r[1] is None, enumerate(row)):
+            row[idx] = message.pop(0)
+
+    # Fill in the last row, if message isn't a multiple of the key
+    last_row_length = (message_length % len(key)) - 1
+    last_row = []
+    while last_row_length:
+        last_row.append(message.pop(0))
+        last_row_length -= 1
+    if last_row:
+        last_row.extend([None] * (len(key) - len(last_row)))
+        disruption_table.append(last_row)
+
+    # Fill in the right portion of the disruption table
+    for row in disruption_table:
+        for idx, _ in filter(lambda r: r[1] == '*', enumerate(row)):
+            if message:
+                row[idx] = message.pop(0)
+            else:
+                row[idx] = '!'
+
+    # Zip the chunk rows together to form the new columns and map the result to lists instead of
+    # tuples
+    rotated_rows = list(map(lambda c: list(c), zip(*disruption_table)))
 
     # Sort the rows according to the key
     sorted_rows = sorted(zip(key, rotated_rows), key=lambda r: r[0])

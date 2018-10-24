@@ -1,4 +1,4 @@
-from .primitives import generate_keys, build_checkerboard, checkerboard_lookup, first_transposition
+from .primitives import generate_keys, build_checkerboard, checkerboard_lookup, first_transposition, second_transposition
 
 
 # The VIC cipher requires the following pieces of input:
@@ -13,3 +13,4 @@ def encrypt(checkerboard_key, keyphrase, personal_id, message_id, date, message)
     checkerboard = build_checkerboard(checkerboard_key, column_order)
     checkered = checkerboard_lookup(message, checkerboard)
     transposed = first_transposition(transp_key_1, checkered)
+    transposed = second_transposition(transp_key_2, transposed)

@@ -24,3 +24,13 @@ def pad_to_multiple(string, filler, multiple):
     if length % multiple != 0:
         string.extend([filler] * (multiple - (length % multiple)))
     return string
+
+
+def inverted_list_index(l):
+    """Given a list, return a list enumerating the indexes that gives the original list in order.
+
+    Example:
+        [3, 1, 2, 4]
+     -> [1, 2, 0, 3]
+    """
+    return [ i[0] for i in sorted(enumerate(l), key=lambda i: i[1]) ]
