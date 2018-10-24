@@ -14,3 +14,17 @@ def encrypt(checkerboard_key, keyphrase, personal_id, message_id, date, message)
     checkered = checkerboard_lookup(message, checkerboard)
     transposed = first_transposition(transp_key_1, checkered)
     transposed = second_transposition(transp_key_2, transposed)
+
+    message_id = list(map(str, message_id))
+    # Last digit of the date says where to insert the message identifier into the ciphertext
+    index = date[-1]
+    if date[-1] == 0:
+        # if the digit is 0, treat it as 10
+        index = 10
+    if index == 1:
+        # If the index is 1, we need to append rather than insert
+        transposed.append(message_id)
+    else:
+        transposed.insert(1 - index, message_id)
+
+    print(' '.join(map(lambda l: ''.join(l), transposed)))

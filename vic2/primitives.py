@@ -255,4 +255,4 @@ def second_transposition(key, message):
     # Flatten the list of lists into a single list
     flattened = [ digit for row in filtered for digit in row ]
 
-    return flattened
+    return list(chunk(flattened, 5))
