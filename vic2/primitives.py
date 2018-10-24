@@ -80,15 +80,15 @@ def calculate_transposition_key_seed(seq_kp_1, seq_kp_2, message_id, date):
     return T
 
 
-def permute_transposition_key_block(U, seqT):
-    # Matrix right-rotate U
-    rotated = zip(*reversed(U))
+def permute_transposition_key_block(expanded_seed, sequentialized_seed):
+    # Matrix right-rotate expanded seed
+    rotated = zip(*reversed(expanded_seed))
 
     # Reverse each resulting row
     reversed_rows = map(lambda l: reversed(l), rotated)
 
-    # Sort key rows according to seqT
-    key_rows = map(lambda r: r[1], sorted(zip(seqT, reversed_rows), key=lambda k: k[0]))
+    # Sort key rows according to the sequentialized seed
+    key_rows = map(lambda r: r[1], sorted(zip(sequentialized_seed, reversed_rows), key=lambda k: k[0]))
 
     return [ digit for row in key_rows for digit in row ]
 
@@ -155,4 +155,44 @@ def checkerboard_lookup(message, checkerboard):
         else:
             result.append(value)
 
-    return pad_to_multiple(result, 5)
+    return pad_to_multiple(result, '0',  5)
+
+
+def first_transposition(key, message):
+    """The first VIC transposition is a simple column transposition consisting of just reading
+    out the message columns in the order specified by the key.
+    """
+
+    # Pad message with Nones for the matrix left rotation to work
+    padded = pad_to_multiple(message, None, len(key))
+    chunked = list(chunk(message, len(key)))
+
+    # Zip the chunk rows together to form the new columns and map the result to lists instead of
+    # tuples, then reverse the list of rows
+    rotated_rows = list(map(lambda c: list(c), zip(*chunked)))
+
+    # Sort the rows according to the key
+    sorted_rows = sorted(zip(key, rotated_rows), key=lambda r: r[0])
+    # Then map away the key from the row tuple
+    rows = map(lambda r: r[1], sorted_rows)
+
+    # Filter out the padded Nones again
+    filtered = [ filter(lambda c: c != None, row) for row in rows ]
+
+    # Flatten the list of lists into a single list
+    flattened = [ digit for row in filtered for digit in row ]
+
+    return flattened
+
+    # Sort the rows according to the key
+    sorted_rows = sorted(zip(key, rotated_rows), key=lambda r: r[0])
+    # Then map away the key from the row tuple
+    rows = map(lambda r: r[1], sorted_rows)
+
+    # Filter out the padded Nones again
+    filtered = [ filter(lambda c: c != None, row) for row in rows ]
+
+    # Flatten the list of lists into a single list
+    flattened = [ digit for row in filtered for digit in row ]
+
+    return flattened

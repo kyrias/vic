@@ -19,8 +19,8 @@ def chunk(chunkable, n):
         yield chunkable[idx:idx+n]
 
 
-def pad_to_multiple(string, multiple):
+def pad_to_multiple(string, filler, multiple):
     length = len(string)
     if length % multiple != 0:
-        string.extend(['0'] * (multiple - (length % multiple)))
+        string.extend([filler] * (multiple - (length % multiple)))
     return string
