@@ -115,7 +115,7 @@ def generate_keys(checkerboard_key, keyphrase, personal_id, message_id, date):
     key_width_2 = personal_id + offset_2
 
     transp_key_1 = sequentialize(transp_key_block[:key_width_1])
-    transp_key_2 = sequentialize(transp_key_block[key_width_1:key_width_2])
+    transp_key_2 = sequentialize(transp_key_block[key_width_1:key_width_1+key_width_2])
 
     # The last row of the expanded transposition key seed is used as the order in which the
     # checkerboard columns will be numbered
