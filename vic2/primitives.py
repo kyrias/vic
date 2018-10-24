@@ -223,7 +223,7 @@ def second_transposition(key, message):
             row[idx] = message.pop(0)
 
     # Fill in the last row, if message isn't a multiple of the key
-    last_row_length = (message_length % len(key)) - 1
+    last_row_length = (message_length % len(key))
     last_row = []
     while last_row_length:
         last_row.append(message.pop(0))
