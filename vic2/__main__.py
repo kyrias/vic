@@ -1,7 +1,7 @@
 import sys
 import argparse
 
-from . import encrypt
+from . import encrypt, decrypt
 
 
 def validate_arguments(args):
@@ -78,12 +78,38 @@ def main():
                                 dest='message',
                                 action='store',
                                 required=True,
-                                help='Message to be encrypted')
+                                help='Message to encrypt')
+
+
+    parser_decrypt = subparsers.add_parser('decrypt', description='VIC cipher decrypter')
+    parser_decrypt.add_argument('-c', '--checkerboard-key',
+                                dest='checkerboard_key',
+                                action='store',
+                                required=True,
+                                help='Key for the straddling checkerboard. (8 characters + 2 spaces)')
+    parser_decrypt.add_argument('-k', '--keyphrase',
+                                dest='keyphrase',
+                                action='store',
+                                required=True,
+                                help='eyphrase used to derive keys. (20 characters)')
+    parser_decrypt.add_argument('-p', '--personal-id',
+                                dest='personal_id',
+                                action='store',
+                                required=True,
+                                help='Personal ID used for generating transposition tables. (2 digits)')
+    parser_decrypt.add_argument('-d', '--date',
+                                dest='date',
+                                action='store',
+                                required=True,
+                                help='Date used to derive keys and inserted into message ID group. (6 digits)')
+    parser_decrypt.add_argument('-m', '--message',
+                                dest='message',
+                                action='store',
+                                required=True,
+                                help='Ciphertext to decrypt')
+
 
     args = parser.parse_args()
-    if not args.subparser:
-        sys.exit(parser.parse_args(['--help']))
-
     if args.subparser == 'encrypt':
         validate_arguments(args)
 
@@ -95,6 +121,18 @@ def main():
         message = args.message
 
         encrypt(checkerboard_key, keyphrase, personal_id, message_id, date, message)
+
+    elif args.subparser == 'decrypt':
+        checkerboard_key = args.checkerboard_key
+        keyphrase = args.keyphrase
+        personal_id = int(args.personal_id)
+        date = list(map(lambda d: int(d), list(args.date)))
+        message = args.message
+
+        decrypt(checkerboard_key, keyphrase, personal_id, date, message)
+
+    else:
+        sys.exit(parser.parse_args(['--help']))
 
 main()
 sys.exit(1)

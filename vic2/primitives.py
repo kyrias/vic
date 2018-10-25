@@ -1,4 +1,5 @@
 from math import ceil
+from copy import deepcopy
 from string import ascii_uppercase
 from itertools import count, cycle
 
@@ -148,7 +149,19 @@ def build_checkerboard(checkerboard_key, column_order):
     return table
 
 
-def checkerboard_lookup(message, checkerboard):
+def invert_checkerboard(checkerboard):
+    inverted = {'holes': []}
+    for key, value in checkerboard.items():
+        inverted[value] = key
+
+        if len(value) == 2:
+            if value[0] not in inverted['holes']:
+                inverted['holes'].append(value[0])
+
+    return inverted
+
+
+def checkerboard_lookup(checkerboard, message):
     result = []
     for char in message:
         value = checkerboard[char]
@@ -158,6 +171,26 @@ def checkerboard_lookup(message, checkerboard):
             result.append(value)
 
     return pad_to_multiple(result, '0',  5)
+
+
+def inverted_checkerboard_lookup(inverted_checkerboard, checkered):
+    result = []
+    while checkered:
+        value = checkered.pop(0)
+
+        if value in inverted_checkerboard['holes']:
+            prefix = value
+            if not checkered:
+                # If there are no more checkered digits at this point, we're
+                # actually trying to look up the padding making the message a
+                # multiple of five.  Annoyingly there's not really any way to
+                # figure this out ahead of time.
+                break
+            value = prefix + checkered.pop(0)
+
+        result.append(inverted_checkerboard[value])
+
+    return result
 
 
 def first_transposition(key, message):
@@ -185,6 +218,60 @@ def first_transposition(key, message):
     flattened = [ digit for row in filtered for digit in row ]
 
     return flattened
+
+
+def undo_first_transposition(key, ciphertext):
+    width = len(key)
+    height = ceil(len(ciphertext) / width)
+    key_index = inverted_list_index(key)
+
+    # Generate the filled rows
+    table = []
+    for _ in range(len(ciphertext) // width):
+        table.append([None] * width)
+
+    # Generate the last, partially filled row
+    last_row_width = len(ciphertext) % width
+    if last_row_width:
+        last_row = [None] * last_row_width
+        last_row.extend(['-'] * (width - last_row_width))
+        table.append(last_row)
+
+    # Loop over each row and column and fill in the table in order of the inverted key index.
+    row_idx = 0
+    column_idx = key_index.pop(0)
+    while True:
+        cell = table[row_idx][column_idx]
+
+        if cell == '-':
+            # If we find a hyphen we've reached the empty section at the
+            # last line, so move on to the next column.
+            row_idx = 0
+            if not key_index:
+                break
+            column_idx = key_index.pop(0)
+
+        else:
+            # Otherwise assign a ciphertext digit to that cell
+            table[row_idx][column_idx] = ciphertext.pop(0)
+            row_idx += 1
+
+        if row_idx == height:
+            # When we reach the height limit go to the next column, if there is one.
+            row_idx = 0
+            if key_index:
+                column_idx = key_index.pop(0)
+            else:
+                break
+
+    untransp = []
+    for row in table:
+        for cell in row:
+            if cell == '-':
+                continue
+            untransp.extend(cell)
+
+    return untransp
 
 
 def build_disruption_table(key, message_length):
@@ -256,3 +343,72 @@ def second_transposition(key, message):
     flattened = [ digit for row in filtered for digit in row ]
 
     return list(chunk(flattened, 5))
+
+
+def undo_second_transposition(key, ciphertext):
+    ciphertext = [ i for sublist in ciphertext for i in sublist ]
+
+    width = len(key)
+    height = ceil(len(ciphertext) / width)
+
+    disruption_table = build_disruption_table(key, len(ciphertext))
+
+    last_row_width = len(ciphertext) % width
+    if last_row_width:
+        last_row = [None] * last_row_width
+        # We fill the end of last rows with '-' since None and '*' is used for
+        # the rest of the disruption table, and we need to keep track of the
+        # last row separately.
+        last_row.extend(['-'] * (width - last_row_width))
+        disruption_table.append(last_row)
+
+    filled_table = deepcopy(disruption_table)
+
+    # Get the indexes into the key that gives the order to insert the values in
+    key_index = inverted_list_index(key)
+
+    # Loop over each row and column and fill in the copied table.
+    row_idx = 0
+    column_idx = key_index.pop(0)
+    while True:
+        cell = filled_table[row_idx][column_idx]
+
+        if cell == '-':
+            # If we find an asterisk we've reached the empty section at the
+            # last line, so move on to the next column.
+            row_idx = 0
+            if not key_index:
+                break
+            column_idx = key_index.pop(0)
+
+        else:
+            filled_table[row_idx][column_idx] = ciphertext.pop(0)
+            row_idx += 1
+
+        if row_idx == height:
+            # When we reach the height limit, go to the next column, if there is one.
+            row_idx = 0
+            if key_index:
+                column_idx = key_index.pop(0)
+            else:
+                break
+
+    # Now loop over the rows and columns of the filled table, and compare it to
+    # the characters in the unfilled disruption table to decide which list to
+    # put the character in.
+    untransp_left = []
+    untransp_right = []
+    for row_idx, row in enumerate(filled_table):
+        for column_idx, digit in enumerate(row):
+            disruption_value = disruption_table[row_idx][column_idx]
+            if disruption_value is None:
+                # None is what we fill the left part of the disruption table with.
+                untransp_left.append(digit)
+            elif disruption_value == '*':
+                # '*' is what we fill the right portion of the disruption table with.
+                untransp_right.append(digit)
+            elif disruption_value == '-':
+                # '-' is what we filled the unfilled part of the last line with, ignore it.
+                continue
+
+    return untransp_left + untransp_right

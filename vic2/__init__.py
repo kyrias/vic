@@ -1,4 +1,7 @@
-from .primitives import generate_keys, build_checkerboard, checkerboard_lookup, first_transposition, second_transposition
+from .primitives import generate_keys, build_checkerboard, invert_checkerboard, \
+                        checkerboard_lookup, first_transposition, second_transposition, \
+                        undo_second_transposition, undo_first_transposition, inverted_checkerboard_lookup
+from .utils import chunk
 
 
 # The VIC cipher requires the following pieces of input:
@@ -33,3 +36,28 @@ def encrypt(checkerboard_key, keyphrase, personal_id, message_id, date, message)
         transposed.insert(1 - index, message_id)
 
     print(' '.join(map(lambda l: ''.join(l), transposed)))
+
+
+def decrypt(checkerboard_key, keyphrase, personal_id, date, ciphertext):
+    # Split the ciphertext into groups of five digits
+    ciphertext = list(chunk(list(filter(lambda c: c != ' ', ciphertext)), 5))
+
+    # Extract the message identifier from the ciphertext
+    index = date[-1]
+    if date[-1] == 0:
+        index = 10
+    message_id = ciphertext.pop(-index)
+    message_id = list(map(lambda d: int(d), list(message_id)))
+
+    (column_order, transp_key_1, transp_key_2) = generate_keys(checkerboard_key, keyphrase, personal_id, message_id, date)
+
+    # Untranspose the ciphertext
+    untransposed_once = undo_second_transposition(transp_key_2, ciphertext)
+    untransposed_twice = undo_first_transposition(transp_key_1, untransposed_once)
+
+    # Uncheckerboard the untransposed ciphertext
+    checkerboard = build_checkerboard(checkerboard_key, column_order)
+    inverted_checkerboard = invert_checkerboard(checkerboard)
+    plaintext = inverted_checkerboard_lookup(inverted_checkerboard, untransposed_twice)
+
+    print(''.join(plaintext))
