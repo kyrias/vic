@@ -73,30 +73,34 @@ def argparser():
 
 
 def validate_arguments(args):
+    error = False
+
     # Checkerboard key
     if len(args.checkerboard_key) != 10:
         print('Error: Specified checkerboard key has a length of {}, length of 10 required'.format(len(args.checkerboard_key)), file=sys.stderr)
-        sys.exit(1)
+        error = True
 
     num_spaces = len(list(filter(lambda c: c == ' ', args.checkerboard_key)))
     if num_spaces != 2:
         print('Error: Specified checkerboard key contains {} spaces, 2 required'.format(num_spaces), file=sys.stderr)
-        sys.exit(1)
+        error = True
 
     num_non_spaces = len(list(filter(lambda c: c != ' ', args.checkerboard_key)))
     if num_non_spaces != 8:
         print('Error: Specified checkerboard key contains {} non-space characters, 8 required'.format(num_non_spaces), file=sys.stderr)
-        sys.exit(1)
+        error = True
+
 
     # Keyphrase
     if len(args.keyphrase) != 20:
         print('Error: Specified keyphrase has a length of {}, length of 20 required'.format(len(args.keyphrase)), file=sys.stderr)
-        sys.exit(1)
+        error = True
+
 
     # Personal ID
     if len(args.personal_id) != 2:
         print('Error: Specified personal ID has a length of {}, length of 2 required'.format(len(args.personal_id)), file=sys.stderr)
-        sys.exit(1)
+        error = True
 
 
     if args.subparser == 'encrypt':
@@ -109,6 +113,9 @@ def validate_arguments(args):
     # Date
     if len(args.date) != 6:
         print('Error: Specified date has a length of {}, length of 6 required'.format(len(args.date)), file=sys.stderr)
+        error = True
+
+    if error:
         sys.exit(1)
 
 
