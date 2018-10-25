@@ -25,15 +25,12 @@ def encrypt(checkerboard_key, keyphrase, personal_id, message_id, date, message)
     message_id = list(map(str, message_id))
 
     # Last digit of the date says where to insert the message identifier into the ciphertext
-    index = date[-1]
-    if date[-1] == 0:
-        # if the digit is 0, treat it as 10
-        index = 10
-    if index == 1:
+    index = date[-1] % len(transposed)
+    if index == 0:
         # If the index is 1, we need to append rather than insert
         transposed.append(message_id)
     else:
-        transposed.insert(1 - index, message_id)
+        transposed.insert(-index, message_id)
 
     print(' '.join(map(lambda l: ''.join(l), transposed)))
 
@@ -43,10 +40,8 @@ def decrypt(checkerboard_key, keyphrase, personal_id, date, ciphertext):
     ciphertext = list(chunk(list(filter(lambda c: c != ' ', ciphertext)), 5))
 
     # Extract the message identifier from the ciphertext
-    index = date[-1]
-    if date[-1] == 0:
-        index = 10
-    message_id = ciphertext.pop(-index)
+    index = date[-1] % (len(ciphertext) - 1)
+    message_id = ciphertext.pop(-(index+1))
     message_id = list(map(lambda d: int(d), list(message_id)))
 
     (column_order, transp_key_1, transp_key_2) = generate_keys(checkerboard_key, keyphrase, personal_id, message_id, date)
