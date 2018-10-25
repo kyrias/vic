@@ -149,14 +149,3 @@ def main():
         sys.exit(parser.parse_args(['--help']))
 
 main()
-sys.exit(1)
-
-
-checkerboard_key = "A SIN TOER"
-keyphrase = 'ALLTHEPEOPLEAREDEADB'.strip()
-message_identifier = [6, 0, 1, 1, 5]
-date = [3, 9, 1, 7, 5, 2]
-personal_number = 15
-
-
-encrypt(checkerboard_key, keyphrase, message_identifier, date, personal_number)
