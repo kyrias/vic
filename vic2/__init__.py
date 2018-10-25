@@ -11,11 +11,16 @@ from .primitives import generate_keys, build_checkerboard, checkerboard_lookup, 
 def encrypt(checkerboard_key, keyphrase, personal_id, message_id, date, message):
     (column_order, transp_key_1, transp_key_2) = generate_keys(checkerboard_key, keyphrase, personal_id, message_id, date)
     checkerboard = build_checkerboard(checkerboard_key, column_order)
-    checkered = checkerboard_lookup(message, checkerboard)
+
+    # Look up the plaintext in the checkerboard
+    checkered = checkerboard_lookup(checkerboard, message)
+
+    # Transpose the checkered ciphertext
     transposed = first_transposition(transp_key_1, checkered)
     transposed = second_transposition(transp_key_2, transposed)
 
     message_id = list(map(str, message_id))
+
     # Last digit of the date says where to insert the message identifier into the ciphertext
     index = date[-1]
     if date[-1] == 0:
