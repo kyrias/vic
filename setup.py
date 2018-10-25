@@ -12,7 +12,7 @@ with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
 
 setup(
     name='vic',
-    version='0.0.1',
+    version='0.1.0',
 
     description='Implementation of the pen-and-paper VIC cipher',
     long_description=long_description,
@@ -34,7 +34,7 @@ setup(
         'License :: OSI Approved :: ISC License (ISCL)',
 
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.7',
     ],
 
     keywords='vic cipher cryptography soviet reino häyhänen',
