@@ -120,7 +120,8 @@ def validate_arguments(args):
 
 
 def main():
-    args = argparser().parse_args()
+    parser = argparser()
+    args = parser.parse_args()
     if args.subparser == 'encrypt':
         validate_arguments(args)
 
