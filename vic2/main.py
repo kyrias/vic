@@ -147,5 +147,3 @@ def main():
 
     else:
         sys.exit(parser.parse_args(['--help']))
-
-main()
