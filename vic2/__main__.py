@@ -134,6 +134,8 @@ def main():
         encrypt(checkerboard_key, keyphrase, personal_id, message_id, date, message)
 
     elif args.subparser == 'decrypt':
+        validate_arguments(args)
+
         checkerboard_key = args.checkerboard_key
         keyphrase = args.keyphrase
         personal_id = int(args.personal_id)
