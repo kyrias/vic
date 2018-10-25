@@ -98,10 +98,13 @@ def validate_arguments(args):
         print('Error: Specified personal ID has a length of {}, length of 2 required'.format(len(args.personal_id)), file=sys.stderr)
         sys.exit(1)
 
-    # Message ID
-    if len(args.message_id) != 5:
-        print('Error: Specified message ID has a length of {}, length of 5 required'.format(len(args.message_id)), file=sys.stderr)
-        sys.exit(1)
+
+    if args.subparser == 'encrypt':
+        # Message ID
+        if len(args.message_id) != 5:
+            print('Error: Specified message ID has a length of {}, length of 5 required'.format(len(args.message_id)), file=sys.stderr)
+            error = True
+
 
     # Date
     if len(args.date) != 6:
