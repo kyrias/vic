@@ -143,7 +143,7 @@ def build_checkerboard(checkerboard_key, column_order):
 
     for hole, layer in [(hole_1, layer_2), (hole_2, layer_3)]:
         for idx, char in enumerate(layer):
-            table[char] = '{:02}'.format(hole*10 + idx)
+            table[char] = '{:02}'.format(column_order[hole]*10 + idx)
 
     return table
 
