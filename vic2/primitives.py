@@ -135,7 +135,7 @@ def build_checkerboard(checkerboard_key, column_order):
     layer_3 = remaining_chars[10:20]
 
     table = {}
-    for idx, char in enumerate(filter(lambda c: c != ' ', layer_1)):
+    for idx, char in filter(lambda c: c[1] != ' ', enumerate(layer_1)):
         table[char] = str(column_order[idx])
 
     hole_1 = checkerboard_key.index(' ')
