@@ -53,17 +53,17 @@ def main():
                                 dest='checkerboard_key',
                                 action='store',
                                 required=True,
-                                help='Key for the straddling checkerboard. (8 characters + 2 spaces)')
+                                help='Straddling checkerboard key. (8 characters + 2 spaces)')
     parser_encrypt.add_argument('-k', '--keyphrase',
                                 dest='keyphrase',
                                 action='store',
                                 required=True,
-                                help='eyphrase used to derive keys. (20 characters)')
+                                help='Keyphrase used to derive transposition table keys. (20 characters)')
     parser_encrypt.add_argument('-p', '--personal-id',
                                 dest='personal_id',
                                 action='store',
                                 required=True,
-                                help='Personal ID used for generating transposition tables. (2 digits)')
+                                help='Personal ID used to derive transposition tables. (2 digits)')
     parser_encrypt.add_argument('-i', '--message-id',
                                 dest='message_id',
                                 action='store',
@@ -74,11 +74,11 @@ def main():
                                 action='store',
                                 required=True,
                                 help='Date used to derive keys and inserted into message ID group. (6 digits)')
-    parser_encrypt.add_argument('-m', '--message',
+    parser_encrypt.add_argument('-t', '--plaintext',
                                 dest='message',
                                 action='store',
                                 required=True,
-                                help='Message to encrypt')
+                                help='Plaintext to encrypt')
 
 
     parser_decrypt = subparsers.add_parser('decrypt', description='VIC cipher decrypter')
@@ -86,23 +86,23 @@ def main():
                                 dest='checkerboard_key',
                                 action='store',
                                 required=True,
-                                help='Key for the straddling checkerboard. (8 characters + 2 spaces)')
+                                help='Straddling checkerboard key. (8 characters + 2 spaces)')
     parser_decrypt.add_argument('-k', '--keyphrase',
                                 dest='keyphrase',
                                 action='store',
                                 required=True,
-                                help='eyphrase used to derive keys. (20 characters)')
+                                help='Keyphrase used to derive transposition table keys. (20 characters)')
     parser_decrypt.add_argument('-p', '--personal-id',
                                 dest='personal_id',
                                 action='store',
                                 required=True,
-                                help='Personal ID used for generating transposition tables. (2 digits)')
+                                help='Personal ID used to derive transposition tables. (2 digits)')
     parser_decrypt.add_argument('-d', '--date',
                                 dest='date',
                                 action='store',
                                 required=True,
                                 help='Date used to derive keys and inserted into message ID group. (6 digits)')
-    parser_decrypt.add_argument('-m', '--message',
+    parser_decrypt.add_argument('-t', '--ciphertext',
                                 dest='message',
                                 action='store',
                                 required=True,
