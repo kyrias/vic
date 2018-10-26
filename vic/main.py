@@ -25,16 +25,16 @@ def argparser():
                                 action='store',
                                 required=True,
                                 help='Personal ID used to derive transposition tables. (2 digits)')
-    parser_encrypt.add_argument('-i', '--message-id',
-                                dest='message_id',
-                                action='store',
-                                required=True,
-                                help='Unique and random message ID. (5 digits)')
     parser_encrypt.add_argument('-d', '--date',
                                 dest='date',
                                 action='store',
                                 required=True,
                                 help='Date used to derive keys and inserted into message ID group. (6 digits)')
+    parser_encrypt.add_argument('-i', '--message-id',
+                                dest='message_id',
+                                action='store',
+                                required=True,
+                                help='Unique and random message ID. (5 digits)')
     parser_encrypt.add_argument('-t', '--plaintext',
                                 dest='message',
                                 action='store',
@@ -103,17 +103,18 @@ def validate_arguments(args):
         error = True
 
 
-    if args.subparser == 'encrypt':
-        # Message ID
-        if len(args.message_id) != 5:
-            print('Error: Specified message ID has a length of {}, length of 5 required'.format(len(args.message_id)), file=sys.stderr)
-            error = True
-
-
     # Date
     if len(args.date) != 6:
         print('Error: Specified date has a length of {}, length of 6 required'.format(len(args.date)), file=sys.stderr)
         error = True
+
+
+    # Message ID
+    if args.subparser == 'encrypt':
+        if len(args.message_id) != 5:
+            print('Error: Specified message ID has a length of {}, length of 5 required'.format(len(args.message_id)), file=sys.stderr)
+            error = True
+
 
     if error:
         sys.exit(1)
@@ -128,11 +129,11 @@ def main():
         checkerboard_key = args.checkerboard_key
         keyphrase = args.keyphrase
         personal_id = int(args.personal_id)
-        message_id = list(map(lambda d: int(d), list(args.message_id)))
         date = list(map(lambda d: int(d), list(args.date)))
+        message_id = list(map(lambda d: int(d), list(args.message_id)))
         message = args.message
 
-        encrypt(checkerboard_key, keyphrase, personal_id, message_id, date, message)
+        encrypt(checkerboard_key, keyphrase, personal_id, date, message_id, message)
 
     elif args.subparser == 'decrypt':
         validate_arguments(args)

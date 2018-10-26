@@ -11,8 +11,8 @@ from .utils import chunk
 # 4) Personal identifier, 2-digits
 # 5) Random and unique message identifier, 5-digits
 
-def encrypt(checkerboard_key, keyphrase, personal_id, message_id, date, message):
-    (column_order, transp_key_1, transp_key_2) = generate_keys(checkerboard_key, keyphrase, personal_id, message_id, date)
+def encrypt(checkerboard_key, keyphrase, personal_id, date, message_id, message):
+    (column_order, transp_key_1, transp_key_2) = generate_keys(checkerboard_key, keyphrase, personal_id, date, message_id)
     checkerboard = build_checkerboard(checkerboard_key, column_order)
 
     # Look up the plaintext in the checkerboard
@@ -44,7 +44,7 @@ def decrypt(checkerboard_key, keyphrase, personal_id, date, ciphertext):
     message_id = ciphertext.pop(-(index+1))
     message_id = list(map(lambda d: int(d), list(message_id)))
 
-    (column_order, transp_key_1, transp_key_2) = generate_keys(checkerboard_key, keyphrase, personal_id, message_id, date)
+    (column_order, transp_key_1, transp_key_2) = generate_keys(checkerboard_key, keyphrase, personal_id, date, message_id)
 
     # Untranspose the ciphertext
     untransposed_once = undo_second_transposition(transp_key_2, ciphertext)

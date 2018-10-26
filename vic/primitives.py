@@ -96,7 +96,7 @@ def permute_transposition_key_block(expanded_seed, sequentialized_seed):
     return [ digit for row in key_rows for digit in row ]
 
 
-def generate_keys(checkerboard_key, keyphrase, personal_id, message_id, date):
+def generate_keys(checkerboard_key, keyphrase, personal_id, date, message_id):
     # First we divide the keyphrase into two parts, and sequentialize them individually
     seq_kp_1 = sequentialize(list(keyphrase[:10]))
     seq_kp_2 = sequentialize(list(keyphrase[10:20]))
