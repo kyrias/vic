@@ -1,3 +1,4 @@
+import sys
 from math import ceil
 from copy import deepcopy
 from string import ascii_uppercase
@@ -116,6 +117,13 @@ def generate_keys(checkerboard_key, keyphrase, personal_id, date, message_id):
     (offset_1, offset_2) = calculate_transposition_offsets(transp_key_block)
     key_width_1 = personal_id + offset_1
     key_width_2 = personal_id + offset_2
+
+    if key_width_1 >= len(transp_key_block):
+        print(('Error: A Personal ID of {} leads to the first transposition '
+               'table width using up all of the transposition key, '
+               'please choose a smaller one.').format(personal_id),
+              file=sys.stderr)
+        sys.exit(1)
 
     transp_key_1 = sequentialize(transp_key_block[:key_width_1])
     transp_key_2 = sequentialize(transp_key_block[key_width_1:key_width_1+key_width_2])
