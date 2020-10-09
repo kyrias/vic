@@ -135,9 +135,8 @@ def generate_keys(checkerboard_key, keyphrase, personal_id, date, message_id):
     return (checkerboard_column_order, transp_key_1, transp_key_2)
 
 
-def build_checkerboard(checkerboard_key, column_order):
-    alphabet = ascii_uppercase + './'
-    remaining_chars = list(filter(lambda c: c not in checkerboard_key, alphabet))
+def build_checkerboard(checkerboard_alphabet, checkerboard_key, column_order):
+    remaining_chars = list(filter(lambda c: c not in checkerboard_key.replace(' ', ''), checkerboard_alphabet))
 
     layer_1 = checkerboard_key
     layer_2 = remaining_chars[:10]

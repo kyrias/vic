@@ -11,9 +11,9 @@ from .utils import chunk
 # 4) Personal identifier, 2-digits
 # 5) Random and unique message identifier, 5-digits
 
-def encrypt(checkerboard_key, keyphrase, personal_id, date, message_id, message):
+def encrypt(checkerboard_alphabet, checkerboard_key, keyphrase, personal_id, date, message_id, message):
     (column_order, transp_key_1, transp_key_2) = generate_keys(checkerboard_key, keyphrase, personal_id, date, message_id)
-    checkerboard = build_checkerboard(checkerboard_key, column_order)
+    checkerboard = build_checkerboard(checkerboard_alphabet, checkerboard_key, column_order)
 
     # Look up the plaintext in the checkerboard
     checkered = checkerboard_lookup(checkerboard, message)
@@ -35,7 +35,7 @@ def encrypt(checkerboard_key, keyphrase, personal_id, date, message_id, message)
     print(' '.join(map(lambda l: ''.join(l), transposed)))
 
 
-def decrypt(checkerboard_key, keyphrase, personal_id, date, ciphertext):
+def decrypt(checkerboard_alphabet, checkerboard_key, keyphrase, personal_id, date, ciphertext):
     # Split the ciphertext into groups of five digits
     ciphertext = list(chunk(list(filter(lambda c: c != ' ', ciphertext)), 5))
 
@@ -51,7 +51,7 @@ def decrypt(checkerboard_key, keyphrase, personal_id, date, ciphertext):
     untransposed_twice = undo_first_transposition(transp_key_1, untransposed_once)
 
     # Uncheckerboard the untransposed ciphertext
-    checkerboard = build_checkerboard(checkerboard_key, column_order)
+    checkerboard = build_checkerboard(checkerboard_alphabet, checkerboard_key, column_order)
     inverted_checkerboard = invert_checkerboard(checkerboard)
     plaintext = inverted_checkerboard_lookup(inverted_checkerboard, untransposed_twice)
 

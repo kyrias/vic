@@ -1,3 +1,4 @@
+from string import ascii_uppercase
 import sys
 import argparse
 
@@ -10,6 +11,9 @@ def argparser():
                                        help='action sub-commands')
 
     parser_encrypt = subparsers.add_parser('encrypt', description='VIC cipher encrypter')
+    parser_encrypt.add_argument('-a', '--alphabet',
+                                default=ascii_uppercase + './',
+                                help='Alphabet used for the straddling checkerboard. (28 characters)')
     parser_encrypt.add_argument('-c', '--checkerboard-key',
                                 dest='checkerboard_key',
                                 action='store',
@@ -43,6 +47,9 @@ def argparser():
 
 
     parser_decrypt = subparsers.add_parser('decrypt', description='VIC cipher decrypter')
+    parser_decrypt.add_argument('-a', '--alphabet',
+                                default=ascii_uppercase + './',
+                                help='Alphabet used for the straddling checkerboard. (28 characters)')
     parser_decrypt.add_argument('-c', '--checkerboard-key',
                                 dest='checkerboard_key',
                                 action='store',
@@ -74,6 +81,10 @@ def argparser():
 
 def validate_arguments(args):
     error = False
+
+    if len(args.alphabet) != 28:
+        print('Error: Specified checkerboard alphabet has a length of {}, length of 28 required'.format(len(args.alphabet)), file=sys.stderr)
+        error=True
 
     # Checkerboard key
     if len(args.checkerboard_key) != 10:
@@ -126,6 +137,7 @@ def main():
     if args.subparser == 'encrypt':
         validate_arguments(args)
 
+        checkerboard_alphabet = args.alphabet
         checkerboard_key = args.checkerboard_key
         keyphrase = args.keyphrase
         personal_id = int(args.personal_id)
@@ -133,18 +145,19 @@ def main():
         message_id = list(map(lambda d: int(d), list(args.message_id)))
         message = args.message
 
-        encrypt(checkerboard_key, keyphrase, personal_id, date, message_id, message)
+        encrypt(checkerboard_alphabet, checkerboard_key, keyphrase, personal_id, date, message_id, message)
 
     elif args.subparser == 'decrypt':
         validate_arguments(args)
 
+        checkerboard_alphabet = args.alphabet
         checkerboard_key = args.checkerboard_key
         keyphrase = args.keyphrase
         personal_id = int(args.personal_id)
         date = list(map(lambda d: int(d), list(args.date)))
         message = args.message
 
-        decrypt(checkerboard_key, keyphrase, personal_id, date, message)
+        decrypt(checkerboard_alphabet, checkerboard_key, keyphrase, personal_id, date, message)
 
     else:
         sys.exit(parser.parse_args(['--help']))
