@@ -172,7 +172,7 @@ def checkerboard_lookup(checkerboard, message):
     result = []
     for char in message:
         if char not in checkerboard:
-            print('Error: {!r} does not exist in checkerboard'.format(char), file=sys.stderr)
+            print('Error: The character {!r} exists in the message but does not exist in the checkerboard alphabet.'.format(char), file=sys.stderr)
             sys.exit(1)
         value = checkerboard[char]
         if len(value) > 1:
